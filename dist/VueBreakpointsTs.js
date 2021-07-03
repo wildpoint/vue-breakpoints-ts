@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.VueBreakpointsTs = void 0;
 const Defaults_1 = require("./Defaults");
 class VueBreakpointsTs {
-    constructor() {
+    constructor(options = {}) {
         this.current = 'xs';
         this.isMobile = false;
         this.height = 0;
@@ -27,8 +27,9 @@ class VueBreakpointsTs {
         this.resizeTimeout = 0;
         this.scrollBarWidth = 16;
         this.mobileBreakpoint = 0;
-        this.thresholds = Object.assign({}, Defaults_1.defaults.thresholds);
-        this.mobileBreakpoint = Defaults_1.defaults.thresholds[Defaults_1.defaults.mobileBreakpoint];
+        this.thresholds = Object.assign(Object.assign({}, Defaults_1.DefaultOptions.thresholds), options.thresholds);
+        this.scrollBarWidth = (options === null || options === void 0 ? void 0 : options.scrollBarWidth) || Defaults_1.DefaultOptions.scrollBarWidth;
+        this.mobileBreakpoint = (options === null || options === void 0 ? void 0 : options.mobileBreakpoint) || Defaults_1.DefaultOptions.mobileBreakpoint;
         this.init();
     }
     init() {
@@ -39,11 +40,11 @@ class VueBreakpointsTs {
         this.height = this.getClientHeight();
         this.width = this.getClientWidth();
         const width = this.width;
-        const xs = width < this.thresholds.xs;
-        const sm = width < this.thresholds.sm && !xs;
-        const md = width < (this.thresholds.md - this.scrollBarWidth) && !(sm || xs);
-        const lg = width < (this.thresholds.lg - this.scrollBarWidth) && !(md || sm || xs);
-        const xl = width >= (this.thresholds.lg - this.scrollBarWidth);
+        const xs = width < this.thresholds.sm;
+        const sm = width < this.thresholds.md && !xs;
+        const md = width < (this.thresholds.lg - this.scrollBarWidth) && !(sm || xs);
+        const lg = width < (this.thresholds.xl - this.scrollBarWidth) && !(md || sm || xs);
+        const xl = width >= (this.thresholds.xl - this.scrollBarWidth);
         this.xs = xs;
         this.sm = sm;
         this.md = md;
@@ -94,7 +95,7 @@ class VueBreakpointsTs {
     }
     onResize() {
         clearTimeout(this.resizeTimeout);
-        this.resizeTimeout = window.setTimeout(this.update.bind(this), 200);
+        this.resizeTimeout = window.setTimeout(this.update.bind(this), 100);
     }
     getClientHeight() {
         if (typeof document === 'undefined')

@@ -1,0 +1,34 @@
+import { OptionsInterface } from 'interfaces/Options.interface';
+import { BreakpointType, VueBreakpointsTsInterface } from './interfaces/VueBreakpointsTs.interface';
+export declare class VueBreakpointsTs implements VueBreakpointsTsInterface {
+    current: BreakpointType;
+    isMobile: boolean;
+    height: number;
+    width: number;
+    xs: boolean;
+    sm: boolean;
+    md: boolean;
+    lg: boolean;
+    xl: boolean;
+    xsOnly: boolean;
+    smOnly: boolean;
+    smAndDown: boolean;
+    smAndUp: boolean;
+    mdOnly: boolean;
+    mdAndDown: boolean;
+    mdAndUp: boolean;
+    lgOnly: boolean;
+    lgAndDown: boolean;
+    lgAndUp: boolean;
+    xlOnly: boolean;
+    private thresholds;
+    private resizeTimeout;
+    private scrollBarWidth;
+    private mobileBreakpoint;
+    constructor(options?: Partial<OptionsInterface>);
+    private init;
+    private update;
+    private onResize;
+    private getClientHeight;
+    private getClientWidth;
+}

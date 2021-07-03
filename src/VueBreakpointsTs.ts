@@ -1,4 +1,5 @@
-import { defaults } from './Defaults'
+import { OptionsInterface } from 'interfaces/Options.interface';
+import { DefaultOptions } from './Defaults'
 import {
   BreakpointThresholds,
   BreakpointType,
@@ -41,14 +42,39 @@ export class VueBreakpointsTs implements VueBreakpointsTsInterface {
    */
   public width = 0
 
+  /**
+   * Extra small devices (portrait phones, less than 576px)
+   *
+   * @memberof VueBreakpointsTs
+   */
   public xs = false
 
+  /**
+   * Small devices (landscape phones, 576px and up)
+   *
+   * @memberof VueBreakpointsTs
+   */
   public sm = false
 
+  /**
+   * Medium devices (tablets, 768px and up)
+   *
+   * @memberof VueBreakpointsTs
+   */
   public md = false
 
+  /**
+   * Large devices (desktops, 992px and up)
+   *
+   * @memberof VueBreakpointsTs
+   */
   public lg = false
 
+  /**
+   * Extra large devices (large desktops, 1200px and up)
+   *
+   * @memberof VueBreakpointsTs
+   */
   public xl = false
 
   public xsOnly = false
@@ -86,12 +112,15 @@ export class VueBreakpointsTs implements VueBreakpointsTsInterface {
    *
    * @memberof VueBreakpointsTs
    */
-  public constructor () {
+  public constructor (options: Partial<OptionsInterface> = {}) {
+
     this.thresholds = {
-      ...defaults.thresholds
+      ...DefaultOptions.thresholds,
+      ...options.thresholds
     }
 
-    this.mobileBreakpoint = defaults.thresholds[defaults.mobileBreakpoint]
+    this.scrollBarWidth = options?.scrollBarWidth || DefaultOptions.scrollBarWidth
+    this.mobileBreakpoint = options?.mobileBreakpoint || DefaultOptions.mobileBreakpoint
 
     this.init()
   }
@@ -120,11 +149,11 @@ export class VueBreakpointsTs implements VueBreakpointsTsInterface {
 
     const width = this.width
 
-    const xs = width < this.thresholds.xs
-    const sm = width < this.thresholds.sm && !xs
-    const md = width < (this.thresholds.md - this.scrollBarWidth) && !(sm || xs)
-    const lg = width < (this.thresholds.lg - this.scrollBarWidth) && !(md || sm || xs)
-    const xl = width >= (this.thresholds.lg - this.scrollBarWidth)
+    const xs = width < this.thresholds.sm
+    const sm = width < this.thresholds.md && !xs
+    const md = width < (this.thresholds.lg - this.scrollBarWidth) && !(sm || xs)
+    const lg = width < (this.thresholds.xl - this.scrollBarWidth) && !(md || sm || xs)
+    const xl = width >= (this.thresholds.xl - this.scrollBarWidth)
 
     this.xs = xs
     this.sm = sm
@@ -193,7 +222,7 @@ export class VueBreakpointsTs implements VueBreakpointsTsInterface {
   private onResize (): void {
     clearTimeout(this.resizeTimeout)
 
-    this.resizeTimeout = window.setTimeout(this.update.bind(this), 200)
+    this.resizeTimeout = window.setTimeout(this.update.bind(this), 100)
   }
 
   /**
