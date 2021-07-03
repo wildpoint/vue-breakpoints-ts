@@ -8,7 +8,6 @@
     "dev": "tsc --watch"
   },
   "author": "James Gardiner",
-  "license": "ISC",
   "dependencies": {
     "vue": "^2.6.14"
   },
